@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Products</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<input type="text" name="category" class="form-control" placeholder="Category" required>
+
+<style>
+
+body{
+    background: linear-gradient(135deg,#76c5cc,#4f8ec6);
+    min-height:100vh;
+    font-family:"Segoe UI",sans-serif;
+}
+
+/* page title */
+.dashboard-title{
+    color:white;
+    font-weight:600;
+}
+
+/* product card */
+.product-card{
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius:16px;
+    color:white;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    padding:20px;
+}
+
+/* product name */
+.product-name{
+    font-weight:600;
+    margin-bottom:5px;
+}
+
+/* category */
+.product-category{
+    font-size:13px;
+    opacity:0.8;
+    margin-bottom:15px;
+}
+
+/* stock label */
+.stock-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+/* stock bar */
+.stock-bar{
+    width:100%;
+    height:8px;
+    background:rgba(255,255,255,0.3);
+    border-radius:6px;
+    overflow:hidden;
+}
+
+/* stock fill */
+.stock-fill{
+    height:100%;
+    background:#00ffb3;
+    border-radius:6px;
+}
+
+/* price */
+.product-price{
+    font-weight:600;
+    margin-top:15px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container mt-5">
+
+<h1 class="dashboard-title mb-4">Products</h1>
+<!-- ADD PRODUCT -->
+<div class="card p-3 mb-4 shadow">
+
+<form method="POST" action="/add_product">
+
+<div class="row">
+
+<div class="col-md-3">
+<input type="text" name="name" class="form-control" placeholder="Product Name" required>
+</div>
+
+<div class="col-md-3">
+<input type="text" name="category" class="form-control" placeholder="Category" required>
+</div>
+
+<div class="col-md-2">
+<input type="number" name="price" class="form-control" placeholder="Price" required>
+</div>
+
+<div class="col-md-2">
+<input type="number" name="stock" class="form-control" placeholder="Stock" required>
+</div>
+
+<div class="col-md-2">
+<button class="btn btn-success w-100">Add</button>
+</div>
+
+</div>
+
+</form>
+
+</div>
+<!-- SEARCH BAR -->
+<form method="GET" action="/products" class="mb-4">
+<div class="input-group">
+<input 
+type="text" 
+name="search" 
+class="form-control" 
+placeholder="Search product..."
+>
+
+<button class="btn btn-dark">Search</button>
+</div>
+</form>
+
+
+<div class="row g-4">
+
+{% for product in products %}
+
+<div class="col-lg-3 col-md-4 col-sm-6">
+
+<div class="product-card">
+
+<h5 class="product-name">{{ product.name }}</h5>
+
+<p class="product-category">{{ product.category }}</p>
+
+<div class="stock-section">
+
+<div class="stock-label">
+<span>Stock</span>
+<span>{{ product.stock }}</span>
+</div>
+
+<div class="stock-bar">
+<div class="stock-fill" style="width: {{ product.stock * 5 }}%;"></div>
+</div>
+
+</div>
+
+<p class="product-price">$ {{ product.price }}</p>
+
+<a href="/product/{{ product.id }}" class="btn btn-light w-100 mt-3">
+View Details
+</a>
+
+<a href="/delete_product/{{ product.id }}" class="btn btn-danger w-100 mt-2">
+Delete
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+
+</html>

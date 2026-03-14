@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        }
+        .card {
+            border-radius: 12px;
+        }
+        .bg-primary {
+            background: linear-gradient(45deg,#36d1dc,#5b86e5) !important;
+        }
+        .bg-success {
+            background: linear-gradient(45deg,#11998e,#38ef7d) !important;
+        }
+        .bg-info {
+            background: linear-gradient(45deg,#56ccf2,#2f80ed) !important;
+        }
+        .bg-danger {
+            background: linear-gradient(45deg,#ff416c,#ff4b2b) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-white">Inventory Dashboard</h2>
+
+    <div class="row">
+        <!-- Total Products -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow mb-4">
+                <div class="card-body">
+                    <h5>Total Products</h5>
+                    <h2>{{ total_products }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Stock -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow mb-4">
+                <div class="card-body">
+                    <h5>Total Stock</h5>
+                    <h2>{{ total_stock }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Received -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow mb-4">
+                <div class="card-body">
+                    <h5>Stock Received</h5>
+                    <h2>{{ stock_in }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Sold -->
+        <div class="col-md-3">
+            <div class="card text-white bg-danger shadow mb-4">
+                <div class="card-body">
+                    <h5>Stock Sold</h5>
+                    <h2>{{ stock_out }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Chart -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <h4 class="mb-4">Inventory Activity</h4>
+            <canvas id="inventoryChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Low Stock Alert -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-danger text-white">
+            ⚠ Low Stock Alert
+        </div>
+        <div class="card-body">
+            {% if low_stock %}
+            <ul class="list-group">
+                {% for p in low_stock %}
+                <li class="list-group-item d-flex justify-content-between">
+                    {{ p['name'] }}
+                    <span class="badge bg-danger">{{ p['stock'] }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-success">All products have sufficient stock.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Access Buttons -->
+    <div class="row mt-4 justify-content-center">
+    <div class="col-md-4">
+            <a href="/products" class="btn btn-info w-100 mb-2">Products</a>
+            <a href="/stock_in" class="btn btn-success w-100 mb-2">Stock In</a>
+            <a href="/stock_out" class="btn btn-danger w-100 mb-2">Stock Out</a>
+            <a href="/history" class="btn btn-primary w-100 mb-2">History</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js Script -->
+<script>
+    const ctx = document.getElementById('inventoryChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Stock In', 'Stock Out'],
+            datasets: [{
+                label: 'Inventory Movement',
+                data: [{{ stock_in }}, {{ stock_out }}],
+                backgroundColor: ['#28a745', '#dc3545']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

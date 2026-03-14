@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Stock Out</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+min-height:100vh;
+}
+
+.header-card{
+background: linear-gradient(90deg,#ff758c,#ff7eb3);
+color:white;
+}
+
+.btn-remove{
+background:linear-gradient(90deg,#ff512f,#dd2476);
+border:none;
+color:white;
+font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark shadow">
+
+<div class="container-fluid">
+
+<span class="navbar-brand">CoreInventory</span>
+
+<div>
+<a href="/dashboard" class="btn btn-warning me-2">Dashboard</a>
+<a href="/products" class="btn btn-info">Products</a>
+</div>
+
+</div>
+
+</nav>
+
+<div class="container mt-5">
+
+<div class="card header-card shadow mb-4">
+
+<div class="card-body text-center">
+
+<h2>📤 Dispatch / Sell Stock</h2>
+<p>Reduce items from warehouse inventory</p>
+
+</div>
+
+</div>
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+<div class="card shadow p-4">
+
+<form method="POST" action="/remove_stock">
+
+<label class="form-label fw-bold">Select Product</label>
+
+<select class="form-control mb-3" name="product_id">
+
+{% for p in products %}
+
+<option value="{{p['id']}}">
+{{p['name']}}
+</option>
+
+{% endfor %}
+
+</select>
+
+<label class="form-label fw-bold">Quantity</label>
+
+<input type="number" class="form-control mb-4" name="quantity" placeholder="Enter quantity">
+
+<button class="btn btn-remove w-100">➖ Remove Stock</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
